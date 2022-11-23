@@ -18,8 +18,11 @@ public class BoardCell {
         return isRevealed;
     }
 
-    public void setRevealed(boolean revealed) {
-        isRevealed = revealed;
+    public boolean isNotRevealed() { return !isRevealed(); }
+
+    public void reveal() {
+        isMarkedAsMine = false;
+        isRevealed = true;
     }
 
     public boolean isMarkedAsMine() {
@@ -27,7 +30,10 @@ public class BoardCell {
     }
 
     public void setMarkedAsMine(boolean markedAsMine) {
-        isMarkedAsMine = markedAsMine;
+        if (isRevealed)
+            isMarkedAsMine = false;
+        else
+            isMarkedAsMine = markedAsMine;
     }
 }
 

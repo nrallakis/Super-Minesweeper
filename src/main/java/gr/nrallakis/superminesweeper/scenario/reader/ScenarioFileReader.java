@@ -6,7 +6,6 @@ import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidDescripti
 import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidValueException;
 import gr.nrallakis.superminesweeper.scenario.reader.parser.ScenarioParser;
 import gr.nrallakis.superminesweeper.scenario.reader.parser.ScenarioTextParser;
-import gr.nrallakis.superminesweeper.scenario.reader.parser.validations.ScenarioValidator;
 
 public class ScenarioFileReader implements ScenarioReader {
     @Override
@@ -15,12 +14,7 @@ public class ScenarioFileReader implements ScenarioReader {
         String scenarioText = "2\n35\n240\n1";
 
         ScenarioParser parser = new ScenarioTextParser();
-        Scenario scenario = parser.parse(scenarioText);
-        ScenarioValidator validator = new ScenarioValidator();
-        if (validator.isValid(scenario)) {
-            return scenario;
-        } else {
-            throw new InvalidValueException();
-        }
+        return parser.parse(scenarioText);
     }
 }
+
