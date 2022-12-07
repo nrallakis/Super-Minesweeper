@@ -55,7 +55,7 @@ public class Game {
 
     private void writeMinesToFile() {
         MineFileWriter writer = new MineFileWriter("mines.txt", board.getMines());
-        writer.writeToFile();
+        writer.write();
     }
 
     public void rightClickCell(int x, int y) {
@@ -84,7 +84,7 @@ public class Game {
                 showSolutionAndFinishGame();
             } else if (cell instanceof EmptyCell){
                 if (((EmptyCell) cell).getNeighbourMines() == 0) {
-                    board.revealNeighbourCellsWithNoNeighbours((EmptyCell) cell);
+                    board.revealNeighbourCellsWithNoNeighbourMines((EmptyCell) cell);
                 }
                 tries++;
             }

@@ -33,9 +33,11 @@ public class MineFileWriterTest {
         );
 
         MineFileWriter mineFileWriter = new MineFileWriter("mines_test.txt", mines);
-        mineFileWriter.writeToFile();
-        List<String> content = Files.readAllLines(Paths.get("mines_test.txt"));
+        mineFileWriter.write();
+        var path = Paths.get("medialab/mines_test.txt");
+        List<String> content = Files.readAllLines(path);
         List<String> expected = Arrays.asList("3,2,0","5,4,0","2,9,1");
         assertEquals(content, expected);
+        Files.deleteIfExists(path);
     }
 }

@@ -16,10 +16,10 @@ public class MineFileWriter {
         this.mines = mines;
     }
 
-    public void writeToFile() {
+    public void write() {
         try {
-            File file = new File(fileName);
-            FileWriter writer = new FileWriter(file.getName());
+            File file = new File("medialab", fileName);
+            FileWriter writer = new FileWriter(file);
             for (MineCell mine : mines) {
                 String line = mine.x + "," + mine.y + "," + (mine.isSuper ? 1 : 0) + "\n";
                 writer.write(line);
@@ -29,6 +29,4 @@ public class MineFileWriter {
             throw new RuntimeException(e);
         }
     }
-
-
 }

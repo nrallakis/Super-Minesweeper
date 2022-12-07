@@ -1,8 +1,7 @@
 package gr.nrallakis.superminesweeper.scenario.reader.parser;
 
-import gr.nrallakis.superminesweeper.scenario.EasyScenario;
-import gr.nrallakis.superminesweeper.scenario.HardScenario;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidDescriptionException;
 import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidValueException;
 
@@ -24,20 +23,12 @@ public class ScenarioTextParser implements ScenarioParser {
             throw new InvalidValueException();
         }
 
-        var scenario = buildScenario(difficulty, minesCount, totalTime, hasSuperMine);
+        var scenarioFactory = new ScenarioFactory();
+        var scenario = scenarioFactory.buildScenario(difficulty, minesCount, totalTime, hasSuperMine);
         if (scenario.isValid()) {
             return scenario;
         } else {
             throw new InvalidValueException();
         }
-    }
-
-    private Scenario buildScenario(int difficulty, int minesCount, int totalTime, boolean hasSuperMine) {
-        if (difficulty == 1) {
-            return new EasyScenario(minesCount, totalTime);
-        } else if (difficulty == 2) {
-            return new HardScenario(minesCount, totalTime, hasSuperMine);
-        }
-        return new EasyScenario(minesCount, totalTime);
     }
 }

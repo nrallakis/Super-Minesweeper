@@ -3,8 +3,9 @@ package gr.nrallakis.superminesweeper;
 import gr.nrallakis.superminesweeper.cell.BoardCell;
 import gr.nrallakis.superminesweeper.cell.EmptyCell;
 import gr.nrallakis.superminesweeper.cell.MineCell;
-import gr.nrallakis.superminesweeper.scenario.HardScenario;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
+import gr.nrallakis.superminesweeper.scenario.ScenarioRules;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,10 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
+    final ScenarioFactory scenarioFactory = new ScenarioFactory();
     final Scenario sampleScenario = scenarioWithNMines(35);
 
     Scenario scenarioWithNMines(int mines) {
-        return new HardScenario(mines, 240, true);
+        return scenarioFactory.buildScenario(2, mines, 240, true);
     }
 
     int getRevealedCellsCount(BoardCell[][] cells) {
@@ -85,53 +87,61 @@ public class GameTest {
 
     @Test
     void clicking_an_empty_cell_reveals_neighbour_empty_cells() {
-        Game game = new Game(scenarioWithNMines(sampleScenario.boardSize), (cells, minesCount, addSuperMine) -> {
-            for (int i = 0; i < sampleScenario.boardSize; i++) {
-                //Fill the third column with mines
-                cells[2][i] = new MineCell(3, 3);
-            }
+        // Let o: not revealed, r: revealed, M: mine (not revealed)
+        // Suppose we have the following
+        //   0 1 2 3 4 5
+        //0  o o 1 1 1 o
+        //1  o o 1 M 2 1
+        //2  o o 1 2 M 1
+        //3  o o o 1 1 1
+        //4  o o o o o o
+        //5  o o o o o o
+
+        // Clicking on 0, 0
+        // Should reveal the following
+        //0  r r r o o o
+        //1  r r r M o o
+        //2  r r r r M o
+        //3  r r r r r r
+        //4  r r r r r r
+        //5  r r r r r r
+        var rules = new ScenarioRules(1, 6, 1,2, 100, 100, false);
+        var scenario = new Scenario(2, 100, false, rules);
+        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {
+            //Place the mines
+            cells[3][1] = new MineCell(3, 1);
+            cells[4][2] = new MineCell(4, 2);
         });
         var cells = game.getCells();
         var emptyCell = cells[0][0];
         assertInstanceOf(EmptyCell.class, emptyCell);
 
         game.clickCell(emptyCell.x, emptyCell.y);
-        // The whole first column should be revealed
-        // The second column should not be revealed
-        boolean firstRevealed = cells[0][0].isRevealed()
-                && cells[0][1].isRevealed()
-                && cells[0][2].isRevealed()
-                && cells[0][3].isRevealed()
-                && cells[0][4].isRevealed()
-                && cells[0][5].isRevealed()
-                && cells[0][6].isRevealed()
-                && cells[0][7].isRevealed()
-                && cells[0][8].isRevealed()
-                && cells[0][9].isRevealed()
-                && cells[0][10].isRevealed()
-                && cells[0][11].isRevealed()
-                && cells[0][12].isRevealed()
-                && cells[0][13].isRevealed()
-                && cells[0][14].isRevealed()
-                && cells[0][15].isRevealed();
+        for (int y = 0; y <= 2; y++) {
+            assertTrue(cells[0][y].isRevealed());
+            assertTrue(cells[1][y].isRevealed());
+            assertTrue(cells[2][y].isRevealed());
+        }
 
-        boolean secondRevealed = cells[1][0].isRevealed()
-                && cells[1][1].isRevealed()
-                && cells[1][2].isRevealed()
-                && cells[1][3].isRevealed()
-                && cells[1][4].isRevealed()
-                && cells[1][5].isRevealed()
-                && cells[1][6].isRevealed()
-                && cells[1][7].isRevealed()
-                && cells[1][8].isRevealed()
-                && cells[1][9].isRevealed()
-                && cells[1][10].isRevealed()
-                && cells[1][11].isRevealed()
-                && cells[1][12].isRevealed()
-                && cells[1][13].isRevealed()
-                && cells[1][14].isRevealed()
-                && cells[1][15].isRevealed();
-        assertTrue(firstRevealed && !secondRevealed);
+        for (int x = 0; x < cells.length; x++) {
+            assertTrue(cells[x][3].isRevealed());
+            assertTrue(cells[x][4].isRevealed());
+            assertTrue(cells[x][5].isRevealed());
+        }
+
+        // The corner cell that has 2 neighbour mines
+        assertTrue(cells[2][2].isRevealed());
+
+        assertFalse(cells[3][0].isRevealed());
+        assertFalse(cells[4][0].isRevealed());
+        assertFalse(cells[5][0].isRevealed());
+
+        assertFalse(cells[3][1].isRevealed());
+        assertFalse(cells[4][1].isRevealed());
+        assertFalse(cells[5][1].isRevealed());
+
+        assertFalse(cells[4][2].isRevealed());
+        assertFalse(cells[5][2].isRevealed());
     }
 
     @Test
@@ -169,9 +179,11 @@ public class GameTest {
             cells[2][3] = new MineCell(2, 3, true);
         });
 
-        List<String> content = Files.readAllLines(Paths.get("mines.txt"));
+        var path = Paths.get("medialab/mines.txt");
+        List<String> content = Files.readAllLines(path);
         List<String> expected = Arrays.asList("1,2,0","2,3,1");
         assertEquals(content, expected);
+        Files.deleteIfExists(path);
     }
 
     @Test

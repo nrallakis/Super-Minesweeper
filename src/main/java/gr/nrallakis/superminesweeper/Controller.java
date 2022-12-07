@@ -1,9 +1,6 @@
 package gr.nrallakis.superminesweeper;
 
-import gr.nrallakis.superminesweeper.cell.BoardCell;
-import gr.nrallakis.superminesweeper.mineplacer.RandomMinePlacer;
-import gr.nrallakis.superminesweeper.scenario.HardScenario;
-import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.ui.CellWidget;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -11,8 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.IOException;
 
 public class Controller {
     @FXML
@@ -23,17 +19,17 @@ public class Controller {
     private Label markedMinesLabel;
     @FXML
     private Label timeLeftLabel;
-    private final int windowWidth = 432;
+    private static final int windowWidth = 432;
     private int squareSize;
     private CellWidget[][] grid;
     private Game game;
 
     @FXML
     public void initialize() {
-        var exampleScenario = new HardScenario(20, 5, true);
+        var exampleScenario = new ScenarioFactory().buildScenario(2, 50, 150, true);
         this.game = new Game(exampleScenario);
 
-        int boardSize = exampleScenario.boardSize;
+        int boardSize = exampleScenario.rules.boardSize;
         grid = new CellWidget[boardSize][boardSize];
 
         // Size in pixels
@@ -83,6 +79,10 @@ public class Controller {
     public void onSolutionClicked() {
         game.showSolutionAndFinishGame();
         draw();
+    }
+
+    public void onCreateClicked() throws IOException {
+        ScenarioForm.show();
     }
 
     @FXML
