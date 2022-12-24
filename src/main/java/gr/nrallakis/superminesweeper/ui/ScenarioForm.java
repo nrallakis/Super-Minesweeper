@@ -15,7 +15,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ScenarioForm {
-
+    @FXML
+    Label hasSuperMineLabel;
+    @FXML
+    CheckBox hasSuperMineCheckbox;
     @FXML
     TextField scenarioNameInput;
     @FXML
@@ -24,7 +27,6 @@ public class ScenarioForm {
     Spinner<Integer> minesSpinner;
     @FXML
     Spinner<Integer> totalTimeSpinner;
-
     @FXML
     Button createButton;
 
@@ -52,9 +54,16 @@ public class ScenarioForm {
 
     public void onDifficultyChanged() {
         var scenarioFactory = new ScenarioFactory();
-        var sampleScenario = scenarioFactory.getRules(getDifficulty());
-        setMinesSpinnerMinMax(sampleScenario);
-        setTotalTimeSpinnerMinMax(sampleScenario);
+        var scenarioRules = scenarioFactory.getRules(getDifficulty());
+        setMinesSpinnerMinMax(scenarioRules);
+        setTotalTimeSpinnerMinMax(scenarioRules);
+        if (scenarioRules.isSuperMineAllowed) {
+            hasSuperMineLabel.setVisible(true);
+            hasSuperMineCheckbox.setVisible(true);
+        } else {
+            hasSuperMineLabel.setVisible(false);
+            hasSuperMineCheckbox.setVisible(false);
+        }
     }
 
     private int getDifficulty() {
@@ -80,7 +89,7 @@ public class ScenarioForm {
         int difficulty = getDifficulty();
         int mines = minesSpinner.getValue();
         int totalTime = totalTimeSpinner.getValue();
-        boolean hasSuperMine = false;
+        boolean hasSuperMine = hasSuperMineCheckbox.isSelected();
 
         var scenario = scenarioFactory.buildScenario(difficulty, mines, totalTime, hasSuperMine);
         scenarioRepository.save(scenarioName, scenario);
