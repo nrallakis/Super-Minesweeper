@@ -19,15 +19,15 @@ public class Game {
     private GameState state;
 
     public Game(Scenario scenario) {
-        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.totalTime), (win) -> {});
+        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.getTotalTime()), (win) -> {});
     }
 
     public Game(Scenario scenario, GameListener listener) {
-        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.totalTime), listener);
+        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.getTotalTime()), listener);
     }
 
     public Game(Scenario scenario, MinePlacer minePlacer) {
-        this(scenario, minePlacer, new CountDownTimer(scenario.totalTime), (win) -> {});
+        this(scenario, minePlacer, new CountDownTimer(scenario.getTotalTime()), (win) -> {});
     }
 
     public Game(Scenario scenario, MinePlacer minePlacer, GameTimer timer, GameListener listener) {
@@ -64,14 +64,14 @@ public class Game {
     }
 
     public void rightClickCell(int x, int y) {
-        var cell = board.cells[x][y];
+        var cell = board.getCells()[x][y];
         boolean isMarkedAsMine = cell.isMarkedAsMine();
         if (isMarkedAsMine) {
             cell.setMarkedAsMine(false);
         } else {
             if (getMarkedMines() == getTotalMines()) return;
             cell.setMarkedAsMine(true);
-            boolean isSuperMine = cell instanceof MineCell && ((MineCell) cell).isSuper;
+            boolean isSuperMine = cell instanceof MineCell && ((MineCell) cell).isSuper();
             if (isSuperMine && tries < 4) {
                 board.superMineMarked((MineCell) cell);
             }
@@ -79,7 +79,7 @@ public class Game {
     }
 
     public void clickCell(int x, int y) {
-        var cell = board.cells[x][y];
+        var cell = board.getCells()[x][y];
         if (cell.isNotRevealed()) {
             cell.reveal();
             if (cell instanceof MineCell) {
@@ -104,13 +104,13 @@ public class Game {
     }
 
     int getTotalMines() {
-        return scenario.minesCount;
+        return scenario.getMinesCount();
     }
 
     int getMarkedMines() {
         int markedMines = 0;
-        for (int x = 0; x < board.size; x++) {
-            for (int y = 0; y < board.size; y++) {
+        for (int x = 0; x < board.getSize(); x++) {
+            for (int y = 0; y < board.getSize(); y++) {
                 if (getCells()[x][y].isMarkedAsMine()) {
                     markedMines++;
                 }

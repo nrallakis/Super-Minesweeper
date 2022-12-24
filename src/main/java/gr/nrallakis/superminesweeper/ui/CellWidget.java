@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class CellWidget extends Group {
-    public final BoardCell cell;
+    private final BoardCell cell;
     private final int x;
     private final int y;
     private final double size;

@@ -1,7 +1,6 @@
 package gr.nrallakis.superminesweeper;
 
 import gr.nrallakis.superminesweeper.scenario.Scenario;
-import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.ui.CellWidget;
 import gr.nrallakis.superminesweeper.ui.ScenarioForm;
 import gr.nrallakis.superminesweeper.ui.ScenarioPicker;
@@ -41,7 +40,7 @@ public class Controller {
         }
         this.game = new Game(scenario, this::onGameFinish);
 
-        int boardSize = scenario.rules.boardSize;
+        int boardSize = scenario.getRules().getBoardSize();
         grid = new CellWidget[boardSize][boardSize];
 
         // Size in pixels
@@ -115,7 +114,10 @@ public class Controller {
     }
 
     public void onLoadClicked() throws IOException {
-        ScenarioPicker.show(scenario -> this.currentScenario = scenario);
+        ScenarioPicker.show(scenario -> {
+            this.currentScenario = scenario;
+            startGame(currentScenario);
+        });
     }
 
     @FXML

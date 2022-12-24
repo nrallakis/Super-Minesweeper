@@ -1,7 +1,7 @@
 package gr.nrallakis.superminesweeper.cell;
 
 public class MineCell extends BoardCell {
-    public boolean isSuper;
+    private final boolean isSuper;
     private boolean isRevealedByUser;
 
     public MineCell(int x, int y) {
@@ -24,6 +24,10 @@ public class MineCell extends BoardCell {
     }
 
     public String toText() {
-        return x + "," + y + "," + (isSuper ? 1 : 0);
+        return getX() + "," + getY() + "," + (isSuper() ? 1 : 0);
+    }
+
+    public boolean isSuper() {
+        return isSuper;
     }
 }

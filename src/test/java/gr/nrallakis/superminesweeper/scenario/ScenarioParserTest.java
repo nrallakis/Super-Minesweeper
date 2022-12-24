@@ -27,10 +27,10 @@ class ScenarioParserTest {
                 "0";       // No super-mines allowed
 
         Scenario scenario = parser.parse(scenarioText);
-        assertEquals(scenario.rules.boardSize, 9); // Difficulty 1 has 9x9 board
-        assertEquals(scenario.minesCount, 11);
-        assertEquals(scenario.totalTime, 120);
-        assertFalse(scenario.hasSuperMine);
+        assertEquals(scenario.getRules().getBoardSize(), 9); // Difficulty 1 has 9x9 board
+        assertEquals(scenario.getMinesCount(), 11);
+        assertEquals(scenario.getTotalTime(), 120);
+        assertFalse(scenario.hasSuperMine());
     }
 
     @Test
@@ -41,10 +41,10 @@ class ScenarioParserTest {
                 "240\n" +  // seconds
                 "1";       // Super-mines allowed
         var scenario = parser.parse(scenarioText);
-        assertEquals(scenario.rules.boardSize, 16); // Difficulty 2 has 16x16 board
-        assertEquals(scenario.minesCount, 35);
-        assertEquals(scenario.totalTime, 240);
-        assertTrue(scenario.hasSuperMine);
+        assertEquals(scenario.getRules().getBoardSize(), 16); // Difficulty 2 has 16x16 board
+        assertEquals(scenario.getMinesCount(), 35);
+        assertEquals(scenario.getTotalTime(), 240);
+        assertTrue(scenario.hasSuperMine());
     }
 
     @ParameterizedTest

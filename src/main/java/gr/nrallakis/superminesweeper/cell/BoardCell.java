@@ -1,8 +1,8 @@
 package gr.nrallakis.superminesweeper.cell;
 
 public class BoardCell {
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
     private boolean isRevealed;
     private boolean isMarkedAsMine;
 
@@ -34,6 +34,14 @@ public class BoardCell {
             isMarkedAsMine = false;
         else
             isMarkedAsMine = markedAsMine;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
 

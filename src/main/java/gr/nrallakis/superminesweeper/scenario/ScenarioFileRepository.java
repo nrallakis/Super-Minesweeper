@@ -60,10 +60,10 @@ public class ScenarioFileRepository implements ScenarioRepository {
             String fileName = name + ".txt";
             File file = new File(basePath, fileName);
             FileWriter writer = new FileWriter(file);
-            writer.write(scenario.rules.difficulty + "\n");
-            writer.write(scenario.minesCount + "\n");
-            writer.write(scenario.totalTime + "\n");
-            writer.write(scenario.hasSuperMine ? "1" : "0");
+            writer.write(scenario.getRules().getDifficulty() + "\n");
+            writer.write(scenario.getMinesCount() + "\n");
+            writer.write(scenario.getTotalTime() + "\n");
+            writer.write(scenario.hasSuperMine() ? "1" : "0");
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

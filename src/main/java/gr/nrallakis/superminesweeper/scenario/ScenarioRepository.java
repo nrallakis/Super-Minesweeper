@@ -7,11 +7,8 @@ import java.util.List;
 
 public interface ScenarioRepository {
     Scenario get(String name) throws Exception;
-
     List<String> getAllNames();
-
     boolean delete(String name);
-
     void save(String name, Scenario scenario);
 
 }

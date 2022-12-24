@@ -57,7 +57,7 @@ public class ScenarioForm {
         var scenarioRules = scenarioFactory.getRules(getDifficulty());
         setMinesSpinnerMinMax(scenarioRules);
         setTotalTimeSpinnerMinMax(scenarioRules);
-        if (scenarioRules.isSuperMineAllowed) {
+        if (scenarioRules.isSuperMineAllowed()) {
             hasSuperMineLabel.setVisible(true);
             hasSuperMineCheckbox.setVisible(true);
         } else {
@@ -96,12 +96,12 @@ public class ScenarioForm {
     }
 
     private void setMinesSpinnerMinMax(ScenarioRules rules) {
-        var spinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(rules.minMinesCount, rules.maxMinesCount);
+        var spinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(rules.getMinMinesCount(), rules.getMaxMinesCount());
         minesSpinner.setValueFactory(spinnerFactory);
     }
 
     private void setTotalTimeSpinnerMinMax(ScenarioRules rules) {
-        var spinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(rules.minTotalTime, rules.maxTotalTime);
+        var spinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(rules.getMinTotalTime(), rules.getMaxTotalTime());
         totalTimeSpinner.setValueFactory(spinnerFactory);
     }
 }

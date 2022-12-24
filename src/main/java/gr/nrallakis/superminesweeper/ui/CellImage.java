@@ -8,7 +8,6 @@ public class CellImage {
     public static final Image EMPTY = loadImage("empty.png");
     public static final Image MINE = loadImage("mine.png");
     public static final Image HITMINE = loadImage("hitmine.png");
-    public static final Image WRONGMINE = loadImage("wrongmine.png");
     private static final Image[] digits = new Image[9];
 
     static {

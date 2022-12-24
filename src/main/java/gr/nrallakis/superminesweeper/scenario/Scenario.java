@@ -3,10 +3,10 @@ package gr.nrallakis.superminesweeper.scenario;
 import static gr.nrallakis.superminesweeper.utils.RangeUtils.inRange;
 
 public class Scenario {
-    public final int minesCount;
-    public final int totalTime;
-    public final boolean hasSuperMine;
-    public final ScenarioRules rules;
+    private final int minesCount;
+    private final int totalTime;
+    private final boolean hasSuperMine;
+    private final ScenarioRules rules;
 
     public Scenario(int minesCount, int totalTime, boolean hasSuperMine, ScenarioRules rules) {
         this.minesCount = minesCount;
@@ -16,11 +16,27 @@ public class Scenario {
     }
 
     public boolean isValid() {
-        boolean superMineNotAllowed = !rules.isSuperMineAllowed;
-        if (superMineNotAllowed && hasSuperMine) return false;
+        boolean superMineNotAllowed = !getRules().isSuperMineAllowed();
+        if (superMineNotAllowed && hasSuperMine()) return false;
 
-        return inRange(minesCount, rules.minMinesCount, rules.maxMinesCount)
-                && inRange(totalTime, rules.minTotalTime, rules.maxTotalTime);
+        return inRange(getMinesCount(), getRules().getMinMinesCount(), getRules().getMaxMinesCount())
+                && inRange(getTotalTime(), getRules().getMinTotalTime(), getRules().getMaxTotalTime());
+    }
+
+    public int getMinesCount() {
+        return minesCount;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public boolean hasSuperMine() {
+        return hasSuperMine;
+    }
+
+    public ScenarioRules getRules() {
+        return rules;
     }
 }
 

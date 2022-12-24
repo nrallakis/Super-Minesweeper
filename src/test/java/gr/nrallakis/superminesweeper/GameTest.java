@@ -45,7 +45,7 @@ public class GameTest {
         var superMine = cells[3][3];
 
         // Act
-        game.rightClickCell(superMine.x, superMine.y);
+        game.rightClickCell(superMine.getX(), superMine.getY());
 
         // Assert
         boolean horizontalRevealed = cells[0][3].isRevealed()
@@ -116,7 +116,7 @@ public class GameTest {
         var emptyCell = cells[0][0];
         assertInstanceOf(EmptyCell.class, emptyCell);
 
-        game.clickCell(emptyCell.x, emptyCell.y);
+        game.clickCell(emptyCell.getX(), emptyCell.getY());
         for (int y = 0; y <= 2; y++) {
             assertTrue(cells[0][y].isRevealed());
             assertTrue(cells[1][y].isRevealed());
@@ -175,7 +175,7 @@ public class GameTest {
         int expectedRevealed = getRevealedCellsCount(cells);
 
         // Marking the super mine after 4 tries should not reveal any more cells
-        game.rightClickCell(superMine.x, superMine.y);
+        game.rightClickCell(superMine.getX(), superMine.getY());
 
         int actualRevealed = getRevealedCellsCount(cells);
 

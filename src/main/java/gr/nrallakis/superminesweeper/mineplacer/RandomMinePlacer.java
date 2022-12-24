@@ -17,14 +17,14 @@ public class RandomMinePlacer implements MinePlacer {
         }
         Collections.shuffle(allCells);
         for (int i = 0; i < minesCount; i++) {
-            int x = allCells.get(i).x;
-            int y = allCells.get(i).y;
+            int x = allCells.get(i).getX();
+            int y = allCells.get(i).getY();
             cells[x][y] = new MineCell(x, y);
         }
         if (addSuperMine) {
             // Without loss of generality, make the first mine super
-            int x = allCells.get(0).x;
-            int y = allCells.get(0).y;
+            int x = allCells.get(0).getX();
+            int y = allCells.get(0).getY();
             cells[x][y] = new MineCell(x, y, true);
         }
     }

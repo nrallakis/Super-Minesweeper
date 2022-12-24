@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScenarioFactory {
-    final Map<Integer, ScenarioRules> rulesMap;
+    private final Map<Integer, ScenarioRules> rulesMap;
 
     public ScenarioFactory() {
         rulesMap = new HashMap<>();
