@@ -79,6 +79,19 @@ public class Board {
         }
     }
 
+    public int getRemainingEmptyCells() {
+        int remainingCells = 0;
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells.length; y++) {
+                var cell = cells[x][y];
+                if (cell instanceof EmptyCell && cell.isNotRevealed()) {
+                    remainingCells++;
+                }
+            }
+        }
+        return remainingCells;
+    }
+
     private int getNeighbourMinesCount(int x, int y) {
         int neighbours = 0;
         if (isMine(x-1, y-1)) neighbours++;

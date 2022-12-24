@@ -145,6 +145,18 @@ public class GameTest {
     }
 
     @Test
+    void revealing_cells_by_clicking_empty_cell_should_unmark_the_marked_mines() {
+        var rules = new ScenarioRules(1, 2, 1,2, 100, 100, false);
+        var scenario = new Scenario(2, 100, false, rules);
+        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {});
+        assertEquals(game.getMarkedMines(), 0);
+        game.rightClickCell(1, 0);
+        assertEquals(game.getMarkedMines(), 1);
+        game.clickCell(0, 0);
+        assertEquals(game.getMarkedMines(), 0);
+    }
+
+    @Test
     void marking_a_super_mine_after_4_tries_should_only_mark_the_mine() {
         // Arrange
         Game game = new Game(scenarioWithNMines(1), (cells, minesCount, addSuperMine) -> {

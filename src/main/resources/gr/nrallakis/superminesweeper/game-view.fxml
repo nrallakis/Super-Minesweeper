@@ -12,8 +12,8 @@
           <Menu mnemonicParsing="false" text="Application">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#onCreateClicked" text="Create" />
-                  <MenuItem mnemonicParsing="false" text="Load" />
-                  <MenuItem mnemonicParsing="false" text="Start" />
+                  <MenuItem mnemonicParsing="false" onAction="#onLoadClicked" text="Load" />
+                  <MenuItem mnemonicParsing="false" text="Start" onAction="#onStartClicked"/>
                   <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
             </items>
           </Menu>
@@ -31,7 +31,7 @@
          <children>
             <HBox>
                <children>
-                  <Label fx:id="minesLabel" text="Mines:">
+                  <Label fx:id="minesLabel" text="Mines: 0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -42,7 +42,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="markedMinesLabel" text="Marked mines:">
+                  <Label fx:id="markedMinesLabel" text="Marked mines: 0">
                      <padding>
                         <Insets right="16.0" />
                      </padding>
@@ -50,7 +50,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="timeLeftLabel" text="Time left:">
+                  <Label fx:id="timeLeftLabel" text="Time left: 0">
                      <padding>
                         <Insets right="16.0" />
                      </padding>

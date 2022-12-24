@@ -10,32 +10,31 @@ import gr.nrallakis.superminesweeper.timer.GameTimer;
 import gr.nrallakis.superminesweeper.timer.CountDownTimer;
 import gr.nrallakis.superminesweeper.timer.TimeChangedListener;
 
-import java.util.Date;
-
 public class Game {
     private final Board board;
     private final Scenario scenario;
-    private Date startTime;
-    private int remainingMines;
-    private int timeLeft;
-    private int markedMines;
+    private final GameTimer timer;
+    private final GameListener listener;
     private int tries;
     private GameState state;
-    private GameTimer timer;
 
     public Game(Scenario scenario) {
-        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.totalTime));
+        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.totalTime), (win) -> {});
+    }
+
+    public Game(Scenario scenario, GameListener listener) {
+        this(scenario, new RandomMinePlacer(), new CountDownTimer(scenario.totalTime), listener);
     }
 
     public Game(Scenario scenario, MinePlacer minePlacer) {
-        this(scenario, minePlacer, new CountDownTimer(scenario.totalTime));
+        this(scenario, minePlacer, new CountDownTimer(scenario.totalTime), (win) -> {});
     }
 
-    public Game(Scenario scenario, MinePlacer minePlacer, GameTimer timer) {
+    public Game(Scenario scenario, MinePlacer minePlacer, GameTimer timer, GameListener listener) {
         this.scenario = scenario;
         this.board = new Board(scenario, minePlacer);
-        this.timeLeft = scenario.totalTime;
         this.timer = timer;
+        this.listener = listener;
         writeMinesToFile();
         start();
     }
@@ -46,11 +45,17 @@ public class Game {
         timer.start();
     }
 
+    public boolean isRunning() {
+        return state == GameState.RUNNING;
+    }
+
     public void showSolutionAndFinishGame() {
         state = GameState.LOST;
         for (var cell : board.getMines()) {
             cell.reveal();
         }
+        timer.stop();
+        listener.onFinish(false);
     }
 
     private void writeMinesToFile() {
@@ -63,15 +68,13 @@ public class Game {
         boolean isMarkedAsMine = cell.isMarkedAsMine();
         if (isMarkedAsMine) {
             cell.setMarkedAsMine(false);
-            markedMines--;
         } else {
-            if (markedMines == getTotalMines()) return;
+            if (getMarkedMines() == getTotalMines()) return;
             cell.setMarkedAsMine(true);
             boolean isSuperMine = cell instanceof MineCell && ((MineCell) cell).isSuper;
             if (isSuperMine && tries < 4) {
                 board.superMineMarked((MineCell) cell);
             }
-            markedMines++;
         }
     }
 
@@ -87,6 +90,11 @@ public class Game {
                     board.revealNeighbourCellsWithNoNeighbourMines((EmptyCell) cell);
                 }
                 tries++;
+                if (board.getRemainingEmptyCells() == 0) {
+                    state = GameState.WON;
+                    timer.stop();
+                    listener.onFinish(true);
+                }
             }
         }
     }
@@ -100,6 +108,14 @@ public class Game {
     }
 
     int getMarkedMines() {
+        int markedMines = 0;
+        for (int x = 0; x < board.size; x++) {
+            for (int y = 0; y < board.size; y++) {
+                if (getCells()[x][y].isMarkedAsMine()) {
+                    markedMines++;
+                }
+            }
+        }
         return markedMines;
     }
 

@@ -1,9 +1,10 @@
-package gr.nrallakis.superminesweeper;
+package gr.nrallakis.superminesweeper.ui;
 
-import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.Application;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
+import gr.nrallakis.superminesweeper.scenario.ScenarioFileRepository;
+import gr.nrallakis.superminesweeper.scenario.ScenarioRepository;
 import gr.nrallakis.superminesweeper.scenario.ScenarioRules;
-import gr.nrallakis.superminesweeper.scenario.writer.ScenarioFileWriter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,6 +28,8 @@ public class ScenarioForm {
     @FXML
     Button createButton;
 
+    private ScenarioRepository scenarioRepository;
+
     public static void show() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("scenario-form.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 300, 200);
@@ -39,6 +42,7 @@ public class ScenarioForm {
 
     @FXML
     public void initialize() {
+        scenarioRepository = new ScenarioFileRepository("medialab/scenarios/");
         difficultyDropDown.getItems().addAll("1: Easy", "2: Hard");
 
         // Select the first difficulty (Easy) as the initial selection
@@ -79,8 +83,7 @@ public class ScenarioForm {
         boolean hasSuperMine = false;
 
         var scenario = scenarioFactory.buildScenario(difficulty, mines, totalTime, hasSuperMine);
-        ScenarioFileWriter writer = new ScenarioFileWriter();
-        writer.write(scenarioName, scenario);
+        scenarioRepository.save(scenarioName, scenario);
     }
 
     private void setMinesSpinnerMinMax(ScenarioRules rules) {
@@ -93,3 +96,5 @@ public class ScenarioForm {
         totalTimeSpinner.setValueFactory(spinnerFactory);
     }
 }
+
+

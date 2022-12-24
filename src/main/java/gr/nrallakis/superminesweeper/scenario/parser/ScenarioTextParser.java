@@ -1,9 +1,9 @@
-package gr.nrallakis.superminesweeper.scenario.reader.parser;
+package gr.nrallakis.superminesweeper.scenario.parser;
 
 import gr.nrallakis.superminesweeper.scenario.Scenario;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
-import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidDescriptionException;
-import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidValueException;
+import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidDescriptionException;
+import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidValueException;
 
 public class ScenarioTextParser implements ScenarioParser {
     @Override

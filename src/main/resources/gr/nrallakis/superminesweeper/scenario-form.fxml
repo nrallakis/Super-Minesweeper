@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.nrallakis.superminesweeper.ScenarioForm">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.nrallakis.superminesweeper.ui.ScenarioForm">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -42,7 +42,7 @@
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="createButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCreateClicked" text="Create" GridPane.columnSpan="2" GridPane.rowIndex="4">
+      <Button fx:id="createButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCreateClicked" style="-fx-background-color: green; -fx-font-weight: bold" text="Create" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets top="16.0" />
          </GridPane.margin>

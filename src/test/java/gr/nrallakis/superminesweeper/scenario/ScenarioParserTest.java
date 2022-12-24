@@ -1,9 +1,9 @@
 package gr.nrallakis.superminesweeper.scenario;
 
-import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidDescriptionException;
-import gr.nrallakis.superminesweeper.scenario.reader.exceptions.InvalidValueException;
-import gr.nrallakis.superminesweeper.scenario.reader.parser.ScenarioParser;
-import gr.nrallakis.superminesweeper.scenario.reader.parser.ScenarioTextParser;
+import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidDescriptionException;
+import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidValueException;
+import gr.nrallakis.superminesweeper.scenario.parser.ScenarioParser;
+import gr.nrallakis.superminesweeper.scenario.parser.ScenarioTextParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

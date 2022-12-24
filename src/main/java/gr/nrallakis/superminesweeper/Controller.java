@@ -1,9 +1,13 @@
 package gr.nrallakis.superminesweeper;
 
+import gr.nrallakis.superminesweeper.scenario.Scenario;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.ui.CellWidget;
+import gr.nrallakis.superminesweeper.ui.ScenarioForm;
+import gr.nrallakis.superminesweeper.ui.ScenarioPicker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -11,6 +15,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 
 public class Controller {
+    private static final int windowWidth = 432;
     @FXML
     private Pane cellGrid;
     @FXML
@@ -19,17 +24,24 @@ public class Controller {
     private Label markedMinesLabel;
     @FXML
     private Label timeLeftLabel;
-    private static final int windowWidth = 432;
     private int squareSize;
     private CellWidget[][] grid;
     private Game game;
 
+    private Scenario currentScenario;
+
     @FXML
     public void initialize() {
-        var exampleScenario = new ScenarioFactory().buildScenario(2, 50, 150, true);
-        this.game = new Game(exampleScenario);
+        cellGrid.setOnMousePressed(this::gridPressed);
+    }
 
-        int boardSize = exampleScenario.rules.boardSize;
+    private void startGame(Scenario scenario) {
+        if (game != null && game.isRunning()) {
+            game.showSolutionAndFinishGame();
+        }
+        this.game = new Game(scenario, this::onGameFinish);
+
+        int boardSize = scenario.rules.boardSize;
         grid = new CellWidget[boardSize][boardSize];
 
         // Size in pixels
@@ -42,9 +54,21 @@ public class Controller {
                 cellGrid.getChildren().add(r);
             }
         }
-        cellGrid.setOnMousePressed(this::gridPressed);
         game.setOnTimeChanged(this::updateTimeLabel);
         draw();
+    }
+
+    private void onGameFinish(boolean isWin) {
+        Alert alert;
+        if (isWin) {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("YOU WON!");
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("YOU LOST!");
+        }
+        alert.setTitle("Message");
+        alert.showAndWait();
     }
 
     private void updateTimeLabel(int secondsLeft) {
@@ -83,6 +107,15 @@ public class Controller {
 
     public void onCreateClicked() throws IOException {
         ScenarioForm.show();
+    }
+
+    public void onStartClicked() {
+        if (currentScenario == null) return;
+        startGame(currentScenario);
+    }
+
+    public void onLoadClicked() throws IOException {
+        ScenarioPicker.show(scenario -> this.currentScenario = scenario);
     }
 
     @FXML
