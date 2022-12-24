@@ -62,10 +62,10 @@ public class Controller {
         Alert alert;
         if (isWin) {
             alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("YOU WON!");
+            alert.setHeaderText("You won! :)");
         } else {
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("YOU LOST!");
+            alert.setHeaderText("You lost! :/");
         }
         alert.setTitle("Message");
         alert.showAndWait();
