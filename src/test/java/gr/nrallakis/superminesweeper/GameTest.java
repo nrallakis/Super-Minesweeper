@@ -6,6 +6,9 @@ import gr.nrallakis.superminesweeper.cell.MineCell;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.scenario.ScenarioRules;
+import gr.nrallakis.superminesweeper.stats.Round;
+import gr.nrallakis.superminesweeper.stats.RoundsFileRepository;
+import gr.nrallakis.superminesweeper.stats.RoundsRepository;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -85,6 +88,7 @@ public class GameTest {
         assertTrue(horizontalRevealed && verticalRevealed);
     }
 
+    @SuppressWarnings("GrazieInspection")
     @Test
     void clicking_an_empty_cell_reveals_neighbour_empty_cells() {
         // Let o: not revealed, r: revealed, M: mine (not revealed)
@@ -196,6 +200,22 @@ public class GameTest {
         List<String> expected = Arrays.asList("1,2,0","2,3,1");
         assertEquals(content, expected);
         Files.deleteIfExists(path);
+    }
+
+    @Test
+    void write_round_to_file_when_game_ends() throws IOException {
+        Game game = new Game(scenarioWithNMines(0), (cells, minesCount, addSuperMine) -> {});
+        assertTrue(game.isRunning());
+        game.clickCell(0, 0); // 1 try, the game is finished immediately, thus the timer will be 240
+        assertFalse(game.isRunning());
+
+        RoundsRepository roundsRepository = new RoundsFileRepository();
+        Round round = roundsRepository.getLastFiveRounds().get(0);
+        assertEquals(1, round.getTotalTries());
+        assertEquals(0, round.getTotalMines());
+        boolean totalTimeValid = round.getTotalTime() == 239 || round.getTotalTime() == 240;
+        assertTrue(totalTimeValid);
+        assertTrue(round.hasUserWon());
     }
 
     @Test

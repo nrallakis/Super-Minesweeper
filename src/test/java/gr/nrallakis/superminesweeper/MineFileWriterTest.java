@@ -32,7 +32,7 @@ public class MineFileWriterTest {
             new MineCell(2, 9, true)
         );
 
-        MineFileWriter mineFileWriter = new MineFileWriter("mines_test.txt", mines);
+        MineWriter mineFileWriter = new MineFileWriter("mines_test.txt", mines);
         mineFileWriter.write();
         var path = Paths.get("medialab/mines_test.txt");
         List<String> content = Files.readAllLines(path);

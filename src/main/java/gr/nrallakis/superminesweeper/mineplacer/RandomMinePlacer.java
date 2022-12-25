@@ -4,16 +4,15 @@ import gr.nrallakis.superminesweeper.cell.BoardCell;
 import gr.nrallakis.superminesweeper.cell.MineCell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class RandomMinePlacer implements MinePlacer {
     @Override
     public void placeMines(BoardCell[][] cells, int minesCount, boolean addSuperMine) {
         var allCells = new ArrayList<BoardCell>();
-        for (int x = 0; x < cells.length; x++) {
-            for (int y = 0; y < cells.length; y++) {
-                allCells.add(cells[x][y]);
-            }
+        for (BoardCell[] row : cells) {
+            allCells.addAll(Arrays.asList(row));
         }
         Collections.shuffle(allCells);
         for (int i = 0; i < minesCount; i++) {

@@ -6,6 +6,9 @@ import gr.nrallakis.superminesweeper.cell.MineCell;
 import gr.nrallakis.superminesweeper.mineplacer.MinePlacer;
 import gr.nrallakis.superminesweeper.mineplacer.RandomMinePlacer;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.stats.Round;
+import gr.nrallakis.superminesweeper.stats.RoundsFileRepository;
+import gr.nrallakis.superminesweeper.stats.RoundsRepository;
 import gr.nrallakis.superminesweeper.timer.GameTimer;
 import gr.nrallakis.superminesweeper.timer.CountDownTimer;
 import gr.nrallakis.superminesweeper.timer.TimeChangedListener;
@@ -15,7 +18,7 @@ public class Game {
     private final Scenario scenario;
     private final GameTimer timer;
     private final GameListener listener;
-    private int tries;
+    private int totalTries;
     private GameState state;
 
     public Game(Scenario scenario) {
@@ -50,17 +53,24 @@ public class Game {
     }
 
     public void showSolutionAndFinishGame() {
-        state = GameState.LOST;
         for (var cell : board.getMines()) {
             cell.reveal();
         }
-        timer.stop();
-        listener.onFinish(false);
+        gameFinished(GameState.LOST);
     }
 
     private void writeMinesToFile() {
-        MineFileWriter writer = new MineFileWriter("mines.txt", board.getMines());
+        MineWriter writer = new MineFileWriter("mines.txt", board.getMines());
         writer.write();
+    }
+
+    private void saveFinishedRound() {
+        RoundsRepository roundsRepository = new RoundsFileRepository();
+        boolean userWon = state == GameState.WON;
+        int totalMines = getTotalMines();
+        int timeLeft = timer.getTimeLeft();
+        Round round = new Round(totalMines, totalTries, timeLeft, userWon);
+        roundsRepository.save(round);
     }
 
     public void rightClickCell(int x, int y) {
@@ -72,10 +82,19 @@ public class Game {
             if (getMarkedMines() == getTotalMines()) return;
             cell.setMarkedAsMine(true);
             boolean isSuperMine = cell instanceof MineCell && ((MineCell) cell).isSuper();
-            if (isSuperMine && tries < 4) {
+            if (isSuperMine && totalTries < 4) {
                 board.superMineMarked((MineCell) cell);
             }
         }
+    }
+
+    private void gameFinished(GameState state) {
+        this.state = state;
+        boolean isWin = state == GameState.WON;
+
+        timer.stop();
+        listener.onFinish(isWin);
+        saveFinishedRound();
     }
 
     public void clickCell(int x, int y) {
@@ -89,11 +108,9 @@ public class Game {
                 if (((EmptyCell) cell).getNeighbourMines() == 0) {
                     board.revealNeighbourCellsWithNoNeighbourMines((EmptyCell) cell);
                 }
-                tries++;
+                totalTries++;
                 if (board.getRemainingEmptyCells() == 0) {
-                    state = GameState.WON;
-                    timer.stop();
-                    listener.onFinish(true);
+                    gameFinished(GameState.WON);
                 }
             }
         }

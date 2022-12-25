@@ -48,17 +48,17 @@ public class ScenarioFileRepository implements ScenarioRepository {
     }
 
     @Override
-    public boolean delete(String name) {
+    public void delete(String name) {
         String fileName = name + ".txt";
         File file = new File(basePath, fileName);
-        return file.delete();
+        file.delete();
     }
 
     @Override
     public void save(String name, Scenario scenario) {
+        String fileName = name + ".txt";
+        File file = new File(basePath, fileName);
         try {
-            String fileName = name + ".txt";
-            File file = new File(basePath, fileName);
             FileWriter writer = new FileWriter(file);
             writer.write(scenario.getRules().getDifficulty() + "\n");
             writer.write(scenario.getMinesCount() + "\n");

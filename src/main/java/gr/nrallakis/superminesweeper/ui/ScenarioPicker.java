@@ -3,6 +3,7 @@ package gr.nrallakis.superminesweeper.ui;
 import gr.nrallakis.superminesweeper.Application;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFileRepository;
+import gr.nrallakis.superminesweeper.scenario.ScenarioRepository;
 import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidDescriptionException;
 import gr.nrallakis.superminesweeper.scenario.exceptions.InvalidValueException;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ public class ScenarioPicker {
     @FXML
     ListView<String> scenarioList;
 
-    private ScenarioFileRepository scenarioRepository;
+    private ScenarioRepository scenarioRepository;
     private ScenarioLoadListener listener;
 
     public static void show(ScenarioLoadListener listener) throws IOException {

@@ -1,6 +1,8 @@
 package gr.nrallakis.superminesweeper;
 
 import gr.nrallakis.superminesweeper.scenario.Scenario;
+import gr.nrallakis.superminesweeper.stats.RoundsFileRepository;
+import gr.nrallakis.superminesweeper.stats.RoundsRepository;
 import gr.nrallakis.superminesweeper.ui.CellWidget;
 import gr.nrallakis.superminesweeper.ui.ScenarioForm;
 import gr.nrallakis.superminesweeper.ui.ScenarioPicker;
@@ -119,6 +121,24 @@ public class Controller {
             startGame(currentScenario);
         });
     }
+
+    public void onRoundsClicked() throws IOException {
+        RoundsRepository roundsRepository = new RoundsFileRepository();
+        var rounds = roundsRepository.getLastFiveRounds();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Last 5 rounds:");
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < rounds.size(); i++) {
+            var round = rounds.get(i);
+            builder.append("Round ").append(i + 1).append(".\n");
+            builder.append(round).append("\n\n");
+        }
+
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
+    }
+
 
     @FXML
     protected void onExit() {

@@ -43,6 +43,11 @@ public class CountDownTimer implements GameTimer {
     }
 
     @Override
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    @Override
     public void setTimeChangedListener(TimeChangedListener listener) {
         this.timeChangedListener = listener;
     }

@@ -6,90 +6,77 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.nrallakis.superminesweeper.Controller">
-   <top>
-      <MenuBar prefWidth="400.0" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Application">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#onCreateClicked" text="Create" />
-                  <MenuItem mnemonicParsing="false" onAction="#onLoadClicked" text="Load" />
-                  <MenuItem mnemonicParsing="false" onAction="#onStartClicked" text="Start" />
-                  <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Details">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Rounds" />
-                <MenuItem mnemonicParsing="false" onAction="#onSolutionClicked" text="Solution" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gr.nrallakis.superminesweeper.Controller">
+    <top>
+        <MenuBar prefWidth="400.0" BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="Application">
+                <MenuItem mnemonicParsing="false" onAction="#onCreateClicked" text="Create"/>
+                <MenuItem mnemonicParsing="false" onAction="#onLoadClicked" text="Load"/>
+                <MenuItem mnemonicParsing="false" onAction="#onStartClicked" text="Start"/>
+                <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Details">
+                <MenuItem mnemonicParsing="false" onAction="#onRoundsClicked" text="Rounds"/>
+                <MenuItem mnemonicParsing="false" onAction="#onSolutionClicked" text="Solution"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <HBox>
-               <children>
-                  <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../mine.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="4.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label fx:id="minesLabel" text="Mines: 0">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets left="8.0" right="16.0" />
-                     </padding>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="22.0" fitWidth="29.0" layoutX="10.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../flag.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="4.0" right="4.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label fx:id="markedMinesLabel" text="Marked mines: 0">
-                     <padding>
-                        <Insets right="16.0" />
-                     </padding>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="22.0" fitWidth="29.0" layoutX="116.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../unrevealed.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="4.0" right="4.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label fx:id="timeLeftLabel" text="Time left: 0">
-                     <padding>
-                        <Insets right="16.0" />
-                     </padding>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="8.0" top="8.0" />
-               </padding>
+                <padding>
+                    <Insets bottom="8.0" top="8.0"/>
+                </padding>
+                <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                    <HBox.margin>
+                        <Insets left="4.0"/>
+                    </HBox.margin>
+                    <Image url="@../../../mine.png"/>
+                </ImageView>
+                <Label fx:id="minesLabel" text="Mines: 0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <padding>
+                        <Insets left="8.0" right="16.0"/>
+                    </padding>
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <ImageView fitHeight="22.0" fitWidth="29.0" layoutX="10.0" layoutY="18.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <HBox.margin>
+                        <Insets left="4.0" right="4.0"/>
+                    </HBox.margin>
+                    <Image url="@../../../flag.png"/>
+                </ImageView>
+                <Label fx:id="markedMinesLabel" text="Marked mines: 0">
+                    <padding>
+                        <Insets right="16.0"/>
+                    </padding>
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <ImageView fitHeight="22.0" fitWidth="29.0" layoutX="116.0" layoutY="18.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <HBox.margin>
+                        <Insets left="4.0" right="4.0"/>
+                    </HBox.margin>
+                    <Image url="@../../../unrevealed.png"/>
+                </ImageView>
+                <Label fx:id="timeLeftLabel" text="Time left: 0">
+                    <padding>
+                        <Insets right="16.0"/>
+                    </padding>
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
             </HBox>
-            <Pane fx:id="cellGrid" />
-         </children>
-      </VBox>
-   </center>
+            <Pane fx:id="cellGrid"/>
+        </VBox>
+    </center>
 </BorderPane>
