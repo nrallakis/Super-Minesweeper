@@ -110,7 +110,7 @@ public class Controller {
         ScenarioForm.show();
     }
 
-    public void onStartClicked() {
+    public void onRestartClicked() {
         if (currentScenario == null) return;
         startGame(currentScenario);
     }
@@ -138,7 +138,6 @@ public class Controller {
         alert.setContentText(builder.toString());
         alert.showAndWait();
     }
-
 
     @FXML
     protected void onExit() {

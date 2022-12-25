@@ -3,12 +3,16 @@ package gr.nrallakis.superminesweeper;
 import gr.nrallakis.superminesweeper.cell.BoardCell;
 import gr.nrallakis.superminesweeper.cell.EmptyCell;
 import gr.nrallakis.superminesweeper.cell.MineCell;
+import gr.nrallakis.superminesweeper.mineplacer.RandomMinePlacer;
 import gr.nrallakis.superminesweeper.scenario.Scenario;
 import gr.nrallakis.superminesweeper.scenario.ScenarioFactory;
 import gr.nrallakis.superminesweeper.scenario.ScenarioRules;
 import gr.nrallakis.superminesweeper.stats.Round;
 import gr.nrallakis.superminesweeper.stats.RoundsFileRepository;
 import gr.nrallakis.superminesweeper.stats.RoundsRepository;
+import gr.nrallakis.superminesweeper.timer.GameTimer;
+import gr.nrallakis.superminesweeper.timer.TimeChangedListener;
+import gr.nrallakis.superminesweeper.timer.TimeoutListener;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -109,7 +113,7 @@ public class GameTest {
         //3  r r r r r r
         //4  r r r r r r
         //5  r r r r r r
-        var rules = new ScenarioRules(1, 6, 1,2, 100, 100, false);
+        var rules = new ScenarioRules(1, 6, 1, 2, 100, 100, false);
         var scenario = new Scenario(2, 100, false, rules);
         Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {
             //Place the mines
@@ -150,9 +154,10 @@ public class GameTest {
 
     @Test
     void revealing_cells_by_clicking_empty_cell_should_unmark_the_marked_mines() {
-        var rules = new ScenarioRules(1, 2, 1,2, 100, 100, false);
+        var rules = new ScenarioRules(1, 2, 1, 2, 100, 100, false);
         var scenario = new Scenario(2, 100, false, rules);
-        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {});
+        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {
+        });
         assertEquals(game.getMarkedMines(), 0);
         game.rightClickCell(1, 0);
         assertEquals(game.getMarkedMines(), 1);
@@ -191,20 +196,35 @@ public class GameTest {
     @Test
     void writes_mines_to_file() throws IOException {
         new Game(scenarioWithNMines(2), (cells, minesCount, addSuperMine) -> {
-            cells[1][2] = new MineCell(1, 2,false);
+            cells[1][2] = new MineCell(1, 2, false);
             cells[2][3] = new MineCell(2, 3, true);
         });
 
         var path = Paths.get("medialab/mines.txt");
         List<String> content = Files.readAllLines(path);
-        List<String> expected = Arrays.asList("1,2,0","2,3,1");
+        List<String> expected = Arrays.asList("1,2,0", "2,3,1");
         assertEquals(content, expected);
         Files.deleteIfExists(path);
     }
 
     @Test
     void write_round_to_file_when_game_ends() throws IOException {
-        Game game = new Game(scenarioWithNMines(0), (cells, minesCount, addSuperMine) -> {});
+        var fakeGameTimer = new GameTimer() {
+            @Override
+            public void start() {}
+            @Override
+            public void stop() {}
+            @Override
+            public void setOnTimeoutListener(TimeoutListener listener) {}
+            @Override
+            public void setTimeChangedListener(TimeChangedListener listener) {}
+            @Override
+            public int getTimeLeft() {
+                return 235;
+            }
+        };
+
+        Game game = new Game(scenarioWithNMines(0), (cells, minesCount, addSuperMine) -> {}, fakeGameTimer);
         assertTrue(game.isRunning());
         game.clickCell(0, 0); // 1 try, the game is finished immediately, thus the timer will be 240
         assertFalse(game.isRunning());
@@ -213,15 +233,14 @@ public class GameTest {
         Round round = roundsRepository.getLastFiveRounds().get(0);
         assertEquals(1, round.getTotalTries());
         assertEquals(0, round.getTotalMines());
-        boolean totalTimeValid = round.getTotalTime() == 239 || round.getTotalTime() == 240;
-        assertTrue(totalTimeValid);
+        assertEquals(235, round.getTotalTime());
         assertTrue(round.hasUserWon());
     }
 
     @Test
     void marking_a_mine_changes_marked_mines_counter() {
         // Arrange
-        Game game = new Game(sampleScenario);
+        Game game = new Game(sampleScenario, new RandomMinePlacer());
 
         assertEquals(0, game.getMarkedMines());
         game.rightClickCell(0, 0);
@@ -254,7 +273,7 @@ public class GameTest {
         assertFalse(cells[3][3].isMarkedAsMine());
 
         // Un-marking one more cell, should enable marking again
-        game.rightClickCell(1,1);
+        game.rightClickCell(1, 1);
         assertFalse(cells[1][1].isMarkedAsMine());
 
         // Marking one more cell, should get marked

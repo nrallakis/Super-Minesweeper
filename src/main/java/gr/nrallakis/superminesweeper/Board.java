@@ -77,7 +77,11 @@ public class Board {
         }
     }
 
-    public int getRemainingEmptyCells() {
+    public boolean areAllCellsRevealed() {
+        return getRemainingEmptyCells() == 0;
+    }
+
+    private int getRemainingEmptyCells() {
         int remainingCells = 0;
         for (int x = 0; x < getCells().length; x++) {
             for (int y = 0; y < getCells().length; y++) {

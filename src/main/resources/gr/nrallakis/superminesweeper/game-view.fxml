@@ -13,7 +13,7 @@
             <Menu mnemonicParsing="false" text="Application">
                 <MenuItem mnemonicParsing="false" onAction="#onCreateClicked" text="Create"/>
                 <MenuItem mnemonicParsing="false" onAction="#onLoadClicked" text="Load"/>
-                <MenuItem mnemonicParsing="false" onAction="#onStartClicked" text="Start"/>
+                <MenuItem mnemonicParsing="false" onAction="#onRestartClicked" text="Restart"/>
                 <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Details">

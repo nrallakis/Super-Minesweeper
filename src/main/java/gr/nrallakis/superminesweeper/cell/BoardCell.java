@@ -13,7 +13,6 @@ public class BoardCell {
         this.isMarkedAsMine = false;
     }
 
-
     public boolean isRevealed() {
         return isRevealed;
     }
