@@ -3,7 +3,6 @@ package gr.nrallakis.superminesweeper.game;
 import gr.nrallakis.superminesweeper.game.cell.BoardCell;
 import gr.nrallakis.superminesweeper.game.cell.EmptyCell;
 import gr.nrallakis.superminesweeper.game.cell.MineCell;
-import gr.nrallakis.superminesweeper.game.Game;
 import gr.nrallakis.superminesweeper.game.mineplacer.RandomMinePlacer;
 import gr.nrallakis.superminesweeper.game.scenario.Scenario;
 import gr.nrallakis.superminesweeper.game.scenario.ScenarioFactory;
@@ -41,6 +40,23 @@ public class GameTest {
             }
         }
         return count;
+    }
+
+    GameTimer fakeTimerWithTimeLeft(int timeLeft) {
+        return new GameTimer() {
+            @Override
+            public void start() {}
+            @Override
+            public void stop() {}
+            @Override
+            public void setOnTimeoutListener(TimeoutListener listener) {}
+            @Override
+            public void setTimeChangedListener(TimeChangedListener listener) {}
+            @Override
+            public int getTimeLeft() {
+                return timeLeft;
+            }
+        };
     }
 
     @Test
@@ -154,11 +170,10 @@ public class GameTest {
     }
 
     @Test
-    void revealing_cells_by_clicking_empty_cell_should_unmark_the_marked_mines() {
+    void revealing_cells_by_clicking_empty_cell_should_unmark_the_marked_mines_that_were_inside_the_revealed_area() {
         var rules = new ScenarioRules(1, 2, 1, 2, 100, 100, false);
         var scenario = new Scenario(2, 100, false, rules);
-        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {
-        });
+        Game game = new Game(scenario, (cells, minesCount, addSuperMine) -> {});
         assertEquals(game.getMarkedMines(), 0);
         game.rightClickCell(1, 0);
         assertEquals(game.getMarkedMines(), 1);
@@ -210,20 +225,7 @@ public class GameTest {
 
     @Test
     void write_round_to_file_when_game_ends() throws IOException {
-        var fakeGameTimer = new GameTimer() {
-            @Override
-            public void start() {}
-            @Override
-            public void stop() {}
-            @Override
-            public void setOnTimeoutListener(TimeoutListener listener) {}
-            @Override
-            public void setTimeChangedListener(TimeChangedListener listener) {}
-            @Override
-            public int getTimeLeft() {
-                return 235;
-            }
-        };
+        var fakeGameTimer = fakeTimerWithTimeLeft(235);
 
         Game game = new Game(scenarioWithNMines(0), (cells, minesCount, addSuperMine) -> {}, fakeGameTimer);
         assertTrue(game.isRunning());
@@ -254,8 +256,9 @@ public class GameTest {
     }
 
     @Test
-    void can_mark_as_many_mines_as_there_are() {
+    void can_only_mark_as_many_mines_as_there_are() {
         // Arrange
+        // Game with 2 mines, which means we can mark at max 2 mines.
         Game game = new Game(scenarioWithNMines(2), (cells, minesCount, addSuperMine) -> {
             cells[3][3] = new MineCell(3, 3, false);
             cells[3][4] = new MineCell(3, 4, false);
