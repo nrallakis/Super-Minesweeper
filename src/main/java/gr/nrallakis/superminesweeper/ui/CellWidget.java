@@ -1,8 +1,8 @@
 package gr.nrallakis.superminesweeper.ui;
 
-import gr.nrallakis.superminesweeper.cell.BoardCell;
-import gr.nrallakis.superminesweeper.cell.EmptyCell;
-import gr.nrallakis.superminesweeper.cell.MineCell;
+import gr.nrallakis.superminesweeper.game.cell.BoardCell;
+import gr.nrallakis.superminesweeper.game.cell.EmptyCell;
+import gr.nrallakis.superminesweeper.game.cell.MineCell;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
